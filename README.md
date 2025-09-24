@@ -4,7 +4,7 @@ ClassPilot is a lightweight class management app built for individual teachersâ€
 
 ## API DOCUMENTATION
 
-(https://github.com/duraanali/classpilot)
+> https://github.com/duraanali/classpilot
 
 ## BASE URL
 
