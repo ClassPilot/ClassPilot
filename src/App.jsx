@@ -1,10 +1,43 @@
+// App.jsx
+import { useState } from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import SideBar from "./Components/Layout/SideBar";
+
+import DashBoardPage from "./Pages/DashBoardPage";
+import NotFoundPage from "./Pages/NotFoundPage";
+import ClassesPage from "./Pages/ClassesPage";
+import StudentPage from "./Pages/StudentPage";
+// import LoginPage from "./Pages/LoginPage";
+import MessagesPage from "./Pages/MessagesPage";
+import ProfilePage from "./Pages/ProfilePage";
+// import SingupPage from "./Pages/SingupPage";
+
 function App() {
+  const [isCollapsed, setIsCollapsed] = useState(false);
+
   return (
-    <div>
-      <h2 className="text-4xl text-center mt-50 capitalize">
-        welcome to <span className="text-fuchsia-700">classPilot</span>
-      </h2>
-    </div>
+    <Router>
+      <div
+        className={`grid min-h-screen transition-all duration-300 ${
+          isCollapsed ? "grid-cols-[80px_1fr]" : "grid-cols-[300px_1fr]"
+        }`}
+      >
+        <SideBar isCollapsed={isCollapsed} setIsCollapsed={setIsCollapsed} />
+
+        <main className="p-6 transition-all duration-300">
+          <Routes>
+            <Route path="/" element={<DashBoardPage />} />
+            <Route path="/students" element={<StudentPage />} />
+            <Route path="/classes" element={<ClassesPage />} />
+            {/* <Route path="/login" element={<LoginPage />} /> */}
+            {/* <Route path="/singup" element={<SingupPage />} /> */}
+            <Route path="/profile" element={<ProfilePage />} />
+            <Route path="/messages" element={<MessagesPage />} />
+            <Route path="*" element={<NotFoundPage />} />
+          </Routes>
+        </main>
+      </div>
+    </Router>
   );
 }
 
