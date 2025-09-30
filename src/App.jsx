@@ -10,6 +10,7 @@ import StudentPage from "./Pages/StudentPage";
 // import LoginPage from "./Pages/LoginPage";
 import MessagesPage from "./Pages/MessagesPage";
 import ProfilePage from "./Pages/ProfilePage";
+import HeaderBar from "./Components/Layout/HeaderBar";
 // import SingupPage from "./Pages/SingupPage";
 
 function App() {
@@ -24,7 +25,8 @@ function App() {
       >
         <SideBar isCollapsed={isCollapsed} setIsCollapsed={setIsCollapsed} />
 
-        <main className="p-6 transition-all duration-300">
+        <main className="transition-all duration-300">
+          <HeaderBar />
           <Routes>
             <Route path="/" element={<DashBoardPage />} />
             <Route path="/students" element={<StudentPage />} />
