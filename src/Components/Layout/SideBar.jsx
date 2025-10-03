@@ -13,7 +13,7 @@ function SideBar({ isCollapsed, setIsCollapsed }) {
   return (
     <aside
       className={`bg-fuchsia-700 text-white h-screen flex flex-col justify-between transition-all duration-300 ${
-        isCollapsed ? "w-[80px]" : "w-[300px]"
+        isCollapsed ? "w-[80px]" : "w-[250px]"
       }`}
     >
       {/* Top Section */}
