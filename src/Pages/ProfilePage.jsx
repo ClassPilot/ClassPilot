@@ -11,6 +11,7 @@ function ProfilePage() {
           <h2 className="text-3xl font-bold text-gray-800">Profile Settings</h2>
           <p className="text-gray-600 mt-2">Manage your account information and preferences</p>
         </div>
+        
 
         {/* Content Cards */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
