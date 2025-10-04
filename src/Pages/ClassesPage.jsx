@@ -30,16 +30,16 @@ function ClassesPage() {
   ]);
 
   return (
-    <div className="p-6">
+    <div className="p-6 bg-gray-50 min-h-screen">
       {/* Header */}
       <div className="flex justify-between items-center mb-6">
-        <h2 className="text-2xl font-bold">Classes</h2>
-        <button className="bg-fuchsia-600 text-white px-4 py-2 rounded-lg shadow hover:bg-fuchsia-700">
+        <h2 className="text-2xl font-bold text-gray-900">Classes</h2>
+        <button className="bg-sky-500 hover:bg-sky-600 text-white px-4 py-2 rounded-lg shadow transition">
           + Create Class
         </button>
       </div>
 
-      <p className="text-gray-500 mb-4">
+      <p className="text-gray-600 mb-4">
         Manage your class roster and curriculum
       </p>
 
@@ -49,7 +49,7 @@ function ClassesPage() {
         <input
           type="text"
           placeholder="Search classes..."
-          className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-fuchsia-500"
+          className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg bg-gray-50 focus:outline-none focus:ring-2 focus:ring-sky-500"
         />
       </div>
 
@@ -58,32 +58,32 @@ function ClassesPage() {
         {classes.map((cls) => (
           <div
             key={cls.id}
-            className="bg-white border border-gray-200 rounded-xl p-4 shadow hover:shadow-lg transition"
+            className="bg-white border border-gray-200 rounded-xl p-4 shadow hover:shadow-lg hover:bg-gray-100 transition"
           >
             <div className="flex items-center gap-2 mb-2">
-              <BookOpen className="text-fuchsia-600" />
-              <h3 className="font-semibold">{cls.title}</h3>
+              <BookOpen className="text-indigo-500" />
+              <h3 className="font-semibold text-gray-900">{cls.title}</h3>
             </div>
-            <p className="text-sm text-gray-500 flex items-center gap-2 mb-2">
+            <p className="text-sm text-gray-600 flex items-center gap-2 mb-2">
               <Users size={16} /> {cls.students} students
             </p>
-            <p className="text-gray-600 text-sm mb-3">{cls.description}</p>
-            <p className="text-xs text-gray-400 flex items-center gap-2 mb-3">
+            <p className="text-gray-700 text-sm mb-3">{cls.description}</p>
+            <p className="text-xs text-gray-500 flex items-center gap-2 mb-3">
               <Calendar size={14} /> {cls.date}
             </p>
             <div className="flex justify-between items-center">
               <a
                 href="#"
-                className="text-fuchsia-600 text-sm font-medium hover:underline"
+                className="text-violet-500 text-sm font-medium hover:underline"
               >
                 View Details →
               </a>
               <div className="flex gap-3 text-gray-400">
                 <button>
-                  <Edit size={18} className="hover:text-fuchsia-600" />
+                  <Edit size={18} className="hover:text-sky-500" />
                 </button>
                 <button>
-                  <Trash2 size={18} className="hover:text-red-600" />
+                  <Trash2 size={18} className="hover:text-red-500" />
                 </button>
               </div>
             </div>

@@ -33,22 +33,26 @@ function StudentsPage() {
   ]);
 
   return (
-    <div className="p-6">
+    <div className="p-6 bg-neutral-50 min-h-screen">
       {/* Header */}
       <div className="flex justify-between items-center mb-6">
-        <h2 className="text-2xl font-bold">Students</h2>
-        <button className="bg-fuchsia-600 text-white px-4 py-2 rounded-lg shadow hover:bg-fuchsia-700">
+        <h2 className="text-2xl font-bold text-neutral-900">Students</h2>
+        <button className="bg-primary-blue hover:bg-interactive-hoverBlue text-white px-4 py-2 rounded-lg shadow transition">
           + Add Student
         </button>
       </div>
 
+      <p className="text-neutral-600 mb-4">
+        Manage your student roster and track progress
+      </p>
+
       {/* Search bar */}
       <div className="relative mb-6">
-        <Search className="absolute left-3 top-3 text-gray-400" size={18} />
+        <Search className="absolute left-3 top-3 text-neutral-400" size={18} />
         <input
           type="text"
           placeholder="Search students..."
-          className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-fuchsia-500"
+          className="w-full pl-10 pr-4 py-2 border border-neutral-200 rounded-lg bg-background-input focus:outline-none focus:ring-2 focus:ring-primary-blue"
         />
       </div>
 
@@ -57,38 +61,39 @@ function StudentsPage() {
         {students.map((student) => (
           <div
             key={student.id}
-            className="bg-white border border-gray-200 rounded-xl p-4 shadow hover:shadow-lg transition"
+            className="bg-white border border-neutral-200 rounded-xl p-4 shadow hover:shadow-lg hover:bg-background-hover transition"
           >
             {/* Header with name & actions */}
             <div className="flex justify-between items-start mb-3">
               <div>
                 <div className="flex items-center gap-2">
-                  <User className="text-fuchsia-600" />
-                  <h3 className="font-semibold">{student.name}</h3>
+                  <User className="text-primary-purple" />
+                  <h3 className="font-semibold text-neutral-900">{student.name}</h3>
                 </div>
-                <p className="text-xs text-gray-500">{student.age}</p>
+                <p className="text-xs text-neutral-500">{student.age}</p>
               </div>
-              <div className="flex gap-3 text-gray-400">
+              <div className="flex gap-3 text-neutral-400">
                 <button>
-                  <Edit size={18} className="hover:text-fuchsia-600" />
+                  <Edit size={18} className="hover:text-primary-blue" />
                 </button>
                 <button>
-                  <Trash2 size={18} className="hover:text-red-600" />
+                  <Trash2 size={18} className="hover:text-semantic-error" />
                 </button>
               </div>
             </div>
 
             {/* Info */}
-            <p className="flex items-center gap-2 text-sm text-gray-600 mb-2">
-              <Mail size={14} className="text-gray-400" /> {student.email}
+            <p className="flex items-center gap-2 text-sm text-neutral-700 mb-2">
+              <Mail size={14} className="text-primary-indigo" /> {student.email}
             </p>
-            <p className="flex items-center gap-2 text-sm text-gray-600 mb-2">
-              <BookOpen size={14} className="text-gray-400" /> {student.grade}
+            <p className="flex items-center gap-2 text-sm text-neutral-700 mb-2">
+              <BookOpen size={14} className="text-primary-indigo" /> {student.grade}
             </p>
-            <p className="text-sm text-gray-600 mb-2">
-              <span className="font-medium">Gender:</span> {student.gender}
+            <p className="text-sm text-neutral-700 mb-2">
+              <span className="font-medium text-neutral-800">Gender:</span>{" "}
+              {student.gender}
             </p>
-            <p className="flex items-center gap-2 text-xs text-gray-400">
+            <p className="flex items-center gap-2 text-xs text-neutral-500">
               <Calendar size={14} /> Joined {student.joined}
             </p>
           </div>

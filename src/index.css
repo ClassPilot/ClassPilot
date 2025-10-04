@@ -1,4 +1,45 @@
 @import "tailwindcss";
+
+/* === ClassPilot Color Palette === */
+:root {
+  /* Primary Colors */
+  --primary-blue: #0ea5e9; /* sky-500 */
+  --primary-indigo: #6366f1; /* indigo-500 */
+  --primary-purple: #8b5cf6; /* violet-500 */
+
+  /* Neutral Colors */
+  --neutral-white: #ffffff;
+  --neutral-50: #f8fafc;
+  --neutral-100: #f1f5f9;
+  --neutral-200: #e2e8f0;
+  --neutral-600: #475569;
+  --neutral-800: #1e293b;
+  --neutral-900: #0f172a;
+
+  /* Semantic Colors */
+  --success-green: #22c55e; /* green-500 */
+  --warning-orange: #f59e0b; /* amber-500 */
+  --error-red: #ef4444; /* red-500 */
+  --info-blue: #3b82f6; /* blue-500 */
+
+  /* Interactive States */
+  --hover-blue: #0284c7; /* sky-600 */
+  --focus-ring: rgba(14, 165, 233, 0.2);
+  --active-blue: #075985; /* sky-800 */
+
+  /* Background Variations */
+  --bg-input: #f8fafc; /* gray-50 */
+  --bg-hover: #f1f5f9; /* gray-100 */
+}
+
+/* === Default Body Style === */
+body {
+  background-color: var(--neutral-50);
+  color: var(--neutral-900);
+  font-family: "Inter", system-ui, sans-serif;
+}
+
+/* === Animation (Wave Hand Emoji) === */
 @keyframes wave {
   0% {
     transform: rotate(0deg);
