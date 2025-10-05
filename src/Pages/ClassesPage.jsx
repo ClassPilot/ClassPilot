@@ -30,21 +30,20 @@ function ClassesPage() {
   ]);
 
   return (
-    <div className="p-6 bg-gray-50 min-h-screen">
+    <div className="p-8 bg-gray-50 min-h-screen">
       {/* Header */}
-      <div className="flex justify-between items-center mb-6">
-        <h2 className="text-2xl font-bold text-gray-900">Classes</h2>
-        <button className="bg-sky-500 hover:bg-sky-600 text-white px-4 py-2 rounded-lg shadow transition">
+      <div className="flex justify-between items-center mb-8">
+        <div>
+          <h2 className="text-2xl font-bold text-gray-900">Classes</h2>
+          <p className="text-gray-500">Manage your class roster and curriculum</p>
+        </div>
+        <button className="bg-indigo-500 hover:bg-indigo-600 text-white px-4 py-2 rounded-lg shadow-sm transition-all flex items-center gap-2">
           + Create Class
         </button>
       </div>
 
-      <p className="text-gray-600 mb-4">
-        Manage your class roster and curriculum
-      </p>
-
       {/* Search bar */}
-      <div className="relative mb-6">
+      <div className="relative mb-8">
         <Search className="absolute left-3 top-3 text-gray-400" size={18} />
         <input
           type="text"
@@ -58,34 +57,45 @@ function ClassesPage() {
         {classes.map((cls) => (
           <div
             key={cls.id}
-            className="bg-white border border-gray-200 rounded-xl p-4 shadow hover:shadow-lg hover:bg-gray-100 transition"
+            className="bg-white border border-gray-200 rounded-2xl p-5 shadow-sm hover:shadow-lg transition-all hover:-translate-y-1 relative"
           >
-            <div className="flex items-center gap-2 mb-2">
-              <BookOpen className="text-indigo-500" />
-              <h3 className="font-semibold text-gray-900">{cls.title}</h3>
+            {/* Top Right Actions (Edit / Delete) */}
+            <div className="absolute top-4 right-4 flex gap-2 text-gray-400">
+              <button className="hover:text-indigo-500 transition">
+                <Edit size={18} />
+              </button>
+              <button className="hover:text-red-500 transition">
+                <Trash2 size={18} />
+              </button>
             </div>
-            <p className="text-sm text-gray-600 flex items-center gap-2 mb-2">
-              <Users size={16} /> {cls.students} students
-            </p>
-            <p className="text-gray-700 text-sm mb-3">{cls.description}</p>
-            <p className="text-xs text-gray-500 flex items-center gap-2 mb-3">
-              <Calendar size={14} /> {cls.date}
-            </p>
+
+            {/* Icon & Title */}
+            <div className="flex items-center gap-3 mb-4 mt-1">
+              <div className="bg-violet-500 text-white p-2 rounded-lg">
+                <BookOpen size={22} />
+              </div>
+              <div>
+                <h3 className="font-semibold text-gray-900">{cls.title}</h3>
+                <p className="text-sm text-gray-500 flex items-center gap-1">
+                  <Users size={14} /> {cls.students} students
+                </p>
+              </div>
+            </div>
+
+            {/* Description */}
+            <p className="text-sm text-gray-600 mb-6 leading-snug">{cls.description}</p>
+
+            {/* Bottom Section: Date (left) + View Details (right) */}
             <div className="flex justify-between items-center">
+              <p className="text-xs text-gray-400 flex items-center gap-2">
+                <Calendar size={14} /> {cls.date}
+              </p>
               <a
                 href="#"
-                className="text-violet-500 text-sm font-medium hover:underline"
+                className="text-sky-600 text-sm font-medium hover:underline"
               >
                 View Details →
               </a>
-              <div className="flex gap-3 text-gray-400">
-                <button>
-                  <Edit size={18} className="hover:text-sky-500" />
-                </button>
-                <button>
-                  <Trash2 size={18} className="hover:text-red-500" />
-                </button>
-              </div>
             </div>
           </div>
         ))}
