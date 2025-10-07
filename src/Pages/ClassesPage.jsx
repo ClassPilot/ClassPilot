@@ -37,7 +37,9 @@ function ClassesPage() {
           <h2 className="text-2xl font-bold text-gray-900">Classes</h2>
           <p className="text-gray-500">Manage your class roster and curriculum</p>
         </div>
-        <button className="bg-indigo-500 hover:bg-indigo-600 text-white px-4 py-2 rounded-lg shadow-sm transition-all flex items-center gap-2">
+        <button
+          onClick={() => { window.location.href = "/add-class"; }}
+         className="bg-indigo-500 hover:bg-indigo-600 text-white px-4 py-2 rounded-lg shadow-sm transition-all flex items-center gap-2">
           + Create Class
         </button>
       </div>

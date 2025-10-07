@@ -10,7 +10,9 @@ import LoginPage from "./Pages/LoginPage";
 import SingupPage from "./Pages/SingupPage";
 import ProfilePage from "./Pages/ProfilePage";
 import MessagesPage from "./Pages/MessagesPage";
+import AddClassForm from "./Pages/AddClassForm";
 import NotFoundPage from "./Pages/NotFoundPage";
+import AddStudentForm from "./Pages/AddStudentForm";
 
 function App() {
   const [isCollapsed, setIsCollapsed] = useState(false);
@@ -34,6 +36,9 @@ function App() {
               <Route path="/profile" element={<ProfilePage />} />
               <Route path="/messages" element={<MessagesPage />} />
               <Route path="*" element={<NotFoundPage />} />
+              <Route path="/add-class" element={<AddClassForm />} />
+              <Route path="/add-student" element={<AddStudentForm />} />
+
             </Routes>
           </main>
         </div>
