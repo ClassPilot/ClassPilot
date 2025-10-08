@@ -13,36 +13,124 @@ import MessagesPage from "./Pages/MessagesPage";
 import AddClassForm from "./Pages/AddClassForm";
 import NotFoundPage from "./Pages/NotFoundPage";
 import AddStudentForm from "./Pages/AddStudentForm";
+import ProtectedRoute from "./Components/Auth/ProtectedRoute";
 
-function App() {
+function AppLayout({ children }) {
   const [isCollapsed, setIsCollapsed] = useState(false);
 
   return (
-    <Router>
-      <div className="flex h-screen overflow-hidden">
-        {/* Sidebar */}
-        <SideBar isCollapsed={isCollapsed} setIsCollapsed={setIsCollapsed} />
+    <div className="flex h-screen overflow-hidden">
+      {/* Sidebar */}
+      <SideBar isCollapsed={isCollapsed} setIsCollapsed={setIsCollapsed} />
 
-        {/* Main content */}
-        <div className={`flex-1 flex flex-col transition-all duration-300`}>
-          <HeaderBar />
-          <main className="flex-1 overflow-y-auto bg-[#f6f6f6] p-4">
-            <Routes>
-              <Route path="/" element={<DashBoardPage />} />
-              <Route path="/students" element={<StudentPage />} />
-              <Route path="/classes" element={<ClassesPage />} />
-              <Route path="/login" element={<LoginPage />} />
-              <Route path="/singup" element={<SingupPage />} />
-              <Route path="/profile" element={<ProfilePage />} />
-              <Route path="/messages" element={<MessagesPage />} />
-              <Route path="*" element={<NotFoundPage />} />
-              <Route path="/add-class" element={<AddClassForm />} />
-              <Route path="/add-student" element={<AddStudentForm />} />
-
-            </Routes>
-          </main>
-        </div>
+      {/* Main content */}
+      <div className="flex-1 flex flex-col transition-all duration-300">
+        <HeaderBar />
+        <main className="flex-1 overflow-y-auto bg-[#f6f6f6] p-4">
+          {children}
+        </main>
       </div>
+    </div>
+  );
+}
+
+function App() {
+  return (
+    <Router>
+      <Routes>
+        {/* Public routes (no sidebar/header) */}
+        <Route
+          path="/login"
+          element={
+            <ProtectedRoute requireAuth={false}>
+              <LoginPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/singup"
+          element={
+            <ProtectedRoute requireAuth={false}>
+              <SingupPage />
+            </ProtectedRoute>
+          }
+        />
+
+        {/* Protected routes (with sidebar/header) */}
+        <Route
+          path="/"
+          element={
+            <ProtectedRoute requireAuth={true}>
+              <AppLayout>
+                <DashBoardPage />
+              </AppLayout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/students"
+          element={
+            <ProtectedRoute requireAuth={true}>
+              <AppLayout>
+                <StudentPage />
+              </AppLayout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/classes"
+          element={
+            <ProtectedRoute requireAuth={true}>
+              <AppLayout>
+                <ClassesPage />
+              </AppLayout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/profile"
+          element={
+            <ProtectedRoute requireAuth={true}>
+              <AppLayout>
+                <ProfilePage />
+              </AppLayout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/messages"
+          element={
+            <ProtectedRoute requireAuth={true}>
+              <AppLayout>
+                <MessagesPage />
+              </AppLayout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/add-class"
+          element={
+            <ProtectedRoute requireAuth={true}>
+              <AppLayout>
+                <AddClassForm />
+              </AppLayout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/add-student"
+          element={
+            <ProtectedRoute requireAuth={true}>
+              <AppLayout>
+                <AddStudentForm />
+              </AppLayout>
+            </ProtectedRoute>
+          }
+        />
+
+        {/* Catch-all */}
+        <Route path="*" element={<NotFoundPage />} />
+      </Routes>
     </Router>
   );
 }

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Search, Users, Calendar, BookOpen, Trash2, Edit } from "lucide-react";
+import { Link } from "react-router-dom";
 
 function ClassesPage() {
   const [classes] = useState([
@@ -35,13 +36,16 @@ function ClassesPage() {
       <div className="flex justify-between items-center mb-8">
         <div>
           <h2 className="text-2xl font-bold text-gray-900">Classes</h2>
-          <p className="text-gray-500">Manage your class roster and curriculum</p>
+          <p className="text-gray-500">
+            Manage your class roster and curriculum
+          </p>
         </div>
-        <button
-          onClick={() => { window.location.href = "/add-class"; }}
-         className="bg-indigo-500 hover:bg-indigo-600 text-white px-4 py-2 rounded-lg shadow-sm transition-all flex items-center gap-2">
+        <Link
+          to="/add-class"
+          className="bg-indigo-500 hover:bg-indigo-600 text-white px-4 py-2 rounded-lg shadow-sm transition-all flex items-center gap-2"
+        >
           + Create Class
-        </button>
+        </Link>
       </div>
 
       {/* Search bar */}
@@ -85,7 +89,9 @@ function ClassesPage() {
             </div>
 
             {/* Description */}
-            <p className="text-sm text-gray-600 mb-6 leading-snug">{cls.description}</p>
+            <p className="text-sm text-gray-600 mb-6 leading-snug">
+              {cls.description}
+            </p>
 
             {/* Bottom Section: Date (left) + View Details (right) */}
             <div className="flex justify-between items-center">

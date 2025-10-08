@@ -1,5 +1,14 @@
 import { useState } from "react";
-import { Search, Mail, BookOpen, Calendar, Edit, Trash2, User } from "lucide-react";
+import { Link } from "react-router-dom";
+import {
+  Search,
+  Mail,
+  BookOpen,
+  Calendar,
+  Edit,
+  Trash2,
+  User,
+} from "lucide-react";
 
 function StudentsPage() {
   const [students] = useState([
@@ -38,13 +47,16 @@ function StudentsPage() {
       <div className="flex justify-between items-center mb-8">
         <div>
           <h2 className="text-2xl font-bold text-gray-900">Students</h2>
-          <p className="text-gray-500">Manage your student roster and track progress</p>
+          <p className="text-gray-500">
+            Manage your student roster and track progress
+          </p>
         </div>
-        <button
-          onClick={() => { window.location.href = "/add-student"; }}
-         className="bg-indigo-500 hover:bg-indigo-600 text-white px-4 py-2 rounded-lg shadow-sm transition-all flex items-center gap-2">
+        <Link
+          to="/add-student"
+          className="bg-indigo-500 hover:bg-indigo-600 text-white px-4 py-2 rounded-lg shadow-sm transition-all flex items-center gap-2"
+        >
           + Add Student
-        </button>
+        </Link>
       </div>
 
       {/* Search bar */}
@@ -93,7 +105,8 @@ function StudentsPage() {
               <BookOpen size={14} className="text-indigo-500" /> {student.grade}
             </p>
             <p className="text-sm text-gray-700 mb-4">
-              <span className="font-medium text-gray-800">Gender:</span> {student.gender}
+              <span className="font-medium text-gray-800">Gender:</span>{" "}
+              {student.gender}
             </p>
 
             {/* Bottom Section: Date (left) + View Details (right) */}

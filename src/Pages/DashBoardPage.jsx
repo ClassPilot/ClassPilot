@@ -1,4 +1,5 @@
 import { Users, BookOpen, Clock, TrendingUp } from "lucide-react";
+import { Link } from "react-router-dom";
 import React from "react";
 import { Calendar } from "@/components/ui/calendar";
 function DashBoardPage() {
@@ -70,12 +71,18 @@ function DashBoardPage() {
           <div className="bg-white rounded-2xl shadow p-4">
             <h3 className="text-lg font-semibold mb-3">Quick Actions</h3>
             <div className="flex flex-col sm:flex-row gap-3">
-              <button className="flex-1 bg-blue-600 text-white py-3 font-bold text-[16px] rounded-lg hover:bg-blue-700 transition">
+              <Link
+                to="/add-student"
+                className="flex-1 bg-blue-600 text-white text-center py-3 font-bold text-[16px] rounded-lg hover:bg-blue-700 transition"
+              >
                 + Add New Student
-              </button>
-              <button className="flex-1 bg-purple-600 text-white py-3 font-bold text-[16px]  rounded-lg hover:bg-purple-700 transition">
+              </Link>
+              <Link
+                to="/add-class"
+                className="flex-1 bg-purple-600 text-white text-center py-3 font-bold text-[16px]  rounded-lg hover:bg-purple-700 transition"
+              >
                 + Create New Class
-              </button>
+              </Link>
             </div>
           </div>
 
