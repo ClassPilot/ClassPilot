@@ -1,68 +1,33 @@
-// src/Pages/AddStudentForm.jsx
-import { useState } from "react";
 import { UserPlus } from "lucide-react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { studentSchema } from "../Schema/StudentSchema";
 
 function AddStudentForm() {
-  const [formData, setFormData] = useState({
-    full_name: "",
-    age: "",
-    gender: "",
-    notes: "",
-    email: "",
-    parentEmail: "",
-    parentPhone: "",
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors, isSubmitting, isSubmitSuccessful },
+  } = useForm({
+    resolver: zodResolver(studentSchema),
+    defaultValues: {
+      full_name: "",
+      age: "",
+      gender: "",
+      notes: "",
+      email: "",
+      parentEmail: "",
+      parentPhone: "",
+    },
   });
-  const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState("");
 
-  const handleChange = (e) => {
-    const { name, value, type } = e.target;
-    const val = type === "number" ? Number(value) : value;
-    setFormData({ ...formData, [name]: val });
-  };
-
-  const validate = () => {
-    if (!formData.full_name || formData.full_name.trim().length < 2) {
-      setMessage("❌ Full name must be at least 2 characters");
-      return false;
-    }
-    if (!formData.age || formData.age < 5 || formData.age > 18) {
-      setMessage("❌ Age must be between 5 and 18");
-      return false;
-    }
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (formData.email && !emailRegex.test(formData.email)) {
-      setMessage("❌ Invalid student email");
-      return false;
-    }
-    if (formData.parentEmail && !emailRegex.test(formData.parentEmail)) {
-      setMessage("❌ Invalid parent email");
-      return false;
-    }
-    return true;
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    setMessage("");
-
-    if (!validate()) return;
-
-    setLoading(true);
-
-    setTimeout(() => {
-      setLoading(false);
-      setMessage("✅ Student added successfully!");
-      setFormData({
-        full_name: "",
-        age: "",
-        gender: "",
-        notes: "",
-        email: "",
-        parentEmail: "",
-        parentPhone: "",
-      });
-    }, 1000);
+  const onSubmit = async (data) => {
+    // Here you can call your Redux dispatch to add student
+    // dispatch(addStudent(data));
+    console.log("Form Data:", data);
+    await new Promise((r) => setTimeout(r, 1000));
+    reset();
   };
 
   return (
@@ -70,52 +35,55 @@ function AddStudentForm() {
       <div className="max-w-2xl mx-auto bg-white border border-gray-200 rounded-2xl shadow p-8">
         {/* Header */}
         <div className="flex items-center gap-3 mb-6">
-          <div className="bg-indigo-500 hover:bg-indigo-600 text-white px-4 py-2 rounded-lg shadow-sm transition-all flex items-center gap-2 cursor-pointer">
+          <div className="bg-indigo-500 text-white px-4 py-2 rounded-lg shadow-sm flex items-center gap-2">
             <UserPlus size={24} />
             <span className="font-medium">Add New Student</span>
           </div>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-5">
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
+          {/* Full Name */}
           <div>
             <label className="block text-gray-700 font-medium mb-1">
               Full Name <span className="text-red-500">*</span>
             </label>
             <input
               type="text"
-              name="full_name"
-              value={formData.full_name}
-              onChange={handleChange}
-              required
-              className="w-full border border-gray-300 rounded-lg px-4 py-2 bg-gray-50 focus:ring-2 focus:ring-indigo-500"
+              {...register("full_name")}
+              className="w-full border rounded-lg px-4 py-2 bg-gray-50 focus:ring-2 focus:ring-indigo-500"
               placeholder="e.g. John Doe"
             />
+            {errors.full_name && (
+              <p className="text-red-500 text-sm mt-1">
+                {errors.full_name.message}
+              </p>
+            )}
           </div>
 
+          {/* Age */}
           <div>
             <label className="block text-gray-700 font-medium mb-1">
               Age <span className="text-red-500">*</span>
             </label>
             <input
               type="number"
-              name="age"
-              value={formData.age}
-              onChange={handleChange}
-              required
+              {...register("age", { valueAsNumber: true })}
+              className="w-full border rounded-lg px-4 py-2 bg-gray-50 focus:ring-2 focus:ring-indigo-500"
               placeholder="5 - 18"
-              className="w-full border border-gray-300 rounded-lg px-4 py-2 bg-gray-50 focus:ring-2 focus:ring-indigo-500"
             />
+            {errors.age && (
+              <p className="text-red-500 text-sm mt-1">{errors.age.message}</p>
+            )}
           </div>
 
+          {/* Gender */}
           <div>
             <label className="block text-gray-700 font-medium mb-1">
               Gender
             </label>
             <select
-              name="gender"
-              value={formData.gender}
-              onChange={handleChange}
-              className="w-full border border-gray-300 rounded-lg px-4 py-2 bg-gray-50 focus:ring-2 focus:ring-indigo-500"
+              {...register("gender")}
+              className="w-full border rounded-lg px-4 py-2 bg-gray-50 focus:ring-2 focus:ring-indigo-500"
             >
               <option value="">Select Gender</option>
               <option value="Male">Male</option>
@@ -124,79 +92,82 @@ function AddStudentForm() {
             </select>
           </div>
 
+          {/* Notes */}
           <div>
             <label className="block text-gray-700 font-medium mb-1">
               Notes
             </label>
             <textarea
-              name="notes"
-              value={formData.notes}
-              onChange={handleChange}
+              {...register("notes")}
               rows="3"
-              className="w-full border border-gray-300 rounded-lg px-4 py-2 bg-gray-50 focus:ring-2 focus:ring-indigo-500"
+              className="w-full border rounded-lg px-4 py-2 bg-gray-50 focus:ring-2 focus:ring-indigo-500"
             ></textarea>
           </div>
 
+          {/* Student Email */}
           <div>
             <label className="block text-gray-700 font-medium mb-1">
               Student Email
             </label>
             <input
               type="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
+              {...register("email")}
               placeholder="student@example.com"
-              className="w-full border border-gray-300 rounded-lg px-4 py-2 bg-gray-50 focus:ring-2 focus:ring-indigo-500"
+              className="w-full border rounded-lg px-4 py-2 bg-gray-50 focus:ring-2 focus:ring-indigo-500"
             />
+            {errors.email && (
+              <p className="text-red-500 text-sm mt-1">
+                {errors.email.message}
+              </p>
+            )}
           </div>
 
+          {/* Parent Email */}
           <div>
             <label className="block text-gray-700 font-medium mb-1">
               Parent Email
             </label>
             <input
               type="email"
-              name="parentEmail"
-              value={formData.parentEmail}
-              onChange={handleChange}
+              {...register("parentEmail")}
               placeholder="parent@example.com"
-              className="w-full border border-gray-300 rounded-lg px-4 py-2 bg-gray-50 focus:ring-2 focus:ring-indigo-500"
+              className="w-full border rounded-lg px-4 py-2 bg-gray-50 focus:ring-2 focus:ring-indigo-500"
             />
+            {errors.parentEmail && (
+              <p className="text-red-500 text-sm mt-1">
+                {errors.parentEmail.message}
+              </p>
+            )}
           </div>
 
+          {/* Parent Phone */}
           <div>
             <label className="block text-gray-700 font-medium mb-1">
               Parent Phone
             </label>
             <input
               type="text"
-              name="parentPhone"
-              value={formData.parentPhone}
-              onChange={handleChange}
+              {...register("parentPhone")}
               placeholder="+252 61 1234567"
-              className="w-full border border-gray-300 rounded-lg px-4 py-2 bg-gray-50 focus:ring-2 focus:ring-indigo-500"
+              className="w-full border rounded-lg px-4 py-2 bg-gray-50 focus:ring-2 focus:ring-indigo-500"
             />
           </div>
 
+          {/* Button */}
           <button
             type="submit"
-            disabled={loading}
+            disabled={isSubmitting}
             className="w-full bg-sky-500 hover:bg-sky-600 text-white py-2 rounded-lg shadow-sm font-medium transition-all"
           >
-            {loading ? "Adding..." : "+ Add Student"}
+            {isSubmitting ? "Adding..." : "+ Add Student"}
           </button>
-        </form>
 
-        {message && (
-          <p
-            className={`mt-5 text-center text-sm font-medium ${
-              message.startsWith("✅") ? "text-green-600" : "text-red-500"
-            }`}
-          >
-            {message}
-          </p>
-        )}
+          {isSubmitSuccessful && (
+            <p className="mt-5 text-center text-green-600 text-sm font-medium">
+              ✅ Student added successfully!
+            </p>
+          )}
+        </form>
       </div>
     </div>
   );
