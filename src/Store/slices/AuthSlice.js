@@ -18,7 +18,7 @@ if (storedToken) {
 }
 
 // Axios global config
-axios.defaults.withCredentials = true;
+axios.defaults.withCredentials = false;
 
 // ✅ Check authentication status
 export const checkAuthStatus = createAsyncThunk(
@@ -26,9 +26,18 @@ export const checkAuthStatus = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const response = await axios.get(`${BaseUrl}/api/auth/me`);
-      return response.data; // your API returns user object directly
+      return response.data;
     } catch (error) {
-      return rejectWithValue(error.response?.data?.error || error.message);
+      // log full server response for debugging
+      console.error(
+        "checkAuthStatus error:",
+        error.response?.data || error.message
+      );
+      return rejectWithValue(
+        error.response?.data?.error ||
+          error.response?.data?.message ||
+          error.message
+      );
     }
   }
 );
