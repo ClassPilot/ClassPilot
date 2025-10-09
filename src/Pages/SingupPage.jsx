@@ -1,7 +1,11 @@
+// ...existing code...
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useDispatch, useSelector } from "react-redux";
+import { register as registerUser } from "../Store/slices/AuthSlice";
+
 import { registerSchema } from "../Schema/AuthSchema";
 import { Mail, Lock, Eye, EyeOff, User } from "lucide-react";
 
@@ -9,34 +13,44 @@ export default function SignupPage() {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const dispatch = useDispatch();
+  const { status, error } = useSelector((state) => state.auth);
 
   const {
     register,
     handleSubmit,
     formState: { errors },
+    reset,
   } = useForm({
     resolver: zodResolver(registerSchema),
   });
-
   const onSubmit = async (data) => {
-    setLoading(true);
     try {
-      // ✅ Replace with real API call
-      await new Promise((r) => setTimeout(r, 800));
-      console.log("Signup Data:", data);
+      // Map form fields to backend expected payload
+      const payload = {
+        name: String(data.fullName),
+        username: String(data.fullName),
+        email: String(data.email),
+        password: String(data.password),
+      };
 
-      // Demo: redirect to login
-      navigate("/login");
-    } catch (err) {
-      console.error(err);
-    } finally {
-      setLoading(false);
+      const resultAction = await dispatch(registerUser(payload));
+
+      if (registerUser.fulfilled.match(resultAction)) {
+        reset(); // clear the form
+        navigate("/login");
+      }
+    } catch (error) {
+      console.error("Error during signup:", error);
     }
   };
-
   return (
     <div className="min-h-screen bg-gradient-to-b from-sky-50 to-white flex items-center justify-center px-4">
+      {status === "loading" && (
+        <p className="text-center text-gray-500">Creating account...</p>
+      )}
+      {error && <p className="text-center text-rose-600">{error}</p>}
+
       <div className="w-full max-w-md">
         {/* Brand */}
         <div className="flex flex-col items-center mb-6">
@@ -201,10 +215,10 @@ export default function SignupPage() {
             {/* Submit */}
             <button
               type="submit"
-              disabled={loading}
+              disabled={status === "loading"}
               className="mt-5 w-full rounded-lg py-2.5 text-white font-medium bg-gradient-to-r from-violet-600 to-fuchsia-500 hover:from-violet-700 hover:to-fuchsia-600 shadow disabled:opacity-60"
             >
-              {loading ? "Creating Account..." : "Create Account"}
+              {status === "loading" ? "Creating Account..." : "Create Account"}
             </button>
           </form>
         </div>

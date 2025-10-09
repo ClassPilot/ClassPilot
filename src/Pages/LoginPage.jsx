@@ -1,14 +1,19 @@
 import { useEffect, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import { loginSchema } from "../Schema/AuthSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Mail, Lock, Eye, EyeOff } from "lucide-react";
+import { useDispatch, useSelector } from "react-redux";
+import { login } from "../Store/slices/AuthSlice";
+import { loginSchema } from "../Schema/AuthSchema";
 
 export default function LoginPage() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const { status, error, isAuthenticated } = useSelector((state) => state.auth);
+
   const [showPassword, setShowPassword] = useState(false);
-  const [loading, setLoading] = useState(false);
 
   const {
     register,
@@ -16,36 +21,22 @@ export default function LoginPage() {
     formState: { errors },
   } = useForm({
     resolver: zodResolver(loginSchema),
-    defaultValues: {
-      email: "",
-      password: "",
-    },
+    defaultValues: { email: "", password: "" },
   });
 
-  // ✅ If already logged in, redirect to Dashboard
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (token) navigate("/");
-  }, [navigate]);
-
-  const onSubmit = async (data) => {
-    setLoading(true);
-    try {
-      // TODO: Replace with real API call
-      await new Promise((r) => setTimeout(r, 600));
-      localStorage.setItem("token", "demo_token");
-      navigate("/");
-    } catch (err) {
-      console.error(err);
-    } finally {
-      setLoading(false);
-    }
+  const onSubmit = (data) => {
+    dispatch(login(data));
   };
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate("/");
+    }
+  }, [isAuthenticated, navigate]);
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-sky-50 to-white flex items-center justify-center px-4">
       <div className="w-full max-w-md">
-        {/* Brand */}
+        {/* Brand section */}
         <div className="flex flex-col items-center mb-6">
           <div className="relative mb-3">
             <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-violet-500 to-fuchsia-500 shadow-lg flex items-center justify-center">
@@ -96,7 +87,6 @@ export default function LoginPage() {
                 id="email"
                 type="email"
                 placeholder="teacher@gmail.com"
-                autoComplete="email"
                 {...register("email")}
                 className={`w-full rounded-lg border pl-10 pr-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent ${
                   errors.email ? "border-rose-500" : "border-gray-200"
@@ -125,7 +115,6 @@ export default function LoginPage() {
                 id="password"
                 type={showPassword ? "text" : "password"}
                 placeholder="••••••••"
-                autoComplete="current-password"
                 {...register("password")}
                 className={`w-full rounded-lg border pl-10 pr-10 py-2.5 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent ${
                   errors.password ? "border-rose-500" : "border-gray-200"
@@ -145,13 +134,20 @@ export default function LoginPage() {
               </p>
             )}
 
+            {/* Error message */}
+            {error && (
+              <p className="text-center text-sm text-rose-600 mt-2">
+                {typeof error === "string" ? error : "Login failed"}
+              </p>
+            )}
+
             {/* Submit */}
             <button
               type="submit"
-              disabled={loading}
+              disabled={status === "loading"}
               className="mt-5 w-full rounded-lg py-2.5 text-white font-medium bg-gradient-to-r from-violet-600 to-fuchsia-500 hover:from-violet-700 hover:to-fuchsia-600 shadow disabled:opacity-60"
             >
-              {loading ? "Signing in..." : "Sign In to ClassPilot"}
+              {status === "loading" ? "Signing in..." : "Sign In to ClassPilot"}
             </button>
           </form>
         </div>
