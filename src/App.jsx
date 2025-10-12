@@ -13,24 +13,35 @@ import MessagesPage from "./Pages/MessagesPage";
 import AddClassForm from "./Pages/AddClassForm";
 import NotFoundPage from "./Pages/NotFoundPage";
 import AddStudentForm from "./Pages/AddStudentForm";
+import StudentDetailsPage from "./Pages/StudentDetailsPage";
+import EditStudentForm from "./Pages/EditStudentForm";
 import ProtectedRoute from "./Components/Auth/ProtectedRoute";
+import EditClassForm from "./Pages/EditClassForm";
+import ClassDetailsPage from "./Pages/ClassDetailsPage";
+// import { ToastContainer } from "react-toastify";
+// import "react-toastify/dist/ReactToastify.css";
 
 function AppLayout({ children }) {
   const [isCollapsed, setIsCollapsed] = useState(false);
 
   return (
-    <div className="flex h-screen overflow-hidden">
-      {/* Sidebar */}
-      <SideBar isCollapsed={isCollapsed} setIsCollapsed={setIsCollapsed} />
+    <>
+      <div className="flex h-screen overflow-hidden">
+        {/* Sidebar */}
+        <SideBar isCollapsed={isCollapsed} setIsCollapsed={setIsCollapsed} />
 
-      {/* Main content */}
-      <div className="flex-1 flex flex-col transition-all duration-300">
-        <HeaderBar />
-        <main className="flex-1 overflow-y-auto bg-[#f6f6f6] p-4">
-          {children}
-        </main>
+        {/* Main content */}
+        <div className="flex-1 flex flex-col transition-all duration-300">
+          <HeaderBar />
+          <main className="flex-1 overflow-y-auto bg-[#f6f6f6] p-4">
+            {children}
+          </main>
+        </div>
       </div>
-    </div>
+
+      {/* <YourRoutesOrLayoutComponents />
+      <ToastContainer position="top-right" autoClose={3000} /> */}
+    </>
   );
 }
 
@@ -84,6 +95,39 @@ function App() {
               <AppLayout>
                 <ClassesPage />
               </AppLayout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/students/:id"
+          element={
+            <ProtectedRoute requireAuth={true}>
+              <StudentDetailsPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/students/edit/:id"
+          element={
+            <ProtectedRoute requireAuth={true}>
+              <EditStudentForm />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/classes/:id"
+          element={
+            <ProtectedRoute requireAuth={true}>
+              <ClassDetailsPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/classes/edit/:id"
+          element={
+            <ProtectedRoute requireAuth={true}>
+              <EditClassForm />
             </ProtectedRoute>
           }
         />

@@ -2,8 +2,13 @@ import { BookOpen } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { classSchema } from "../Schema/ClassesScheme";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { addClasses } from "../Store/slices/classesSlice";
 
 function AddClassForm() {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -22,6 +27,11 @@ function AddClassForm() {
   });
 
   const onSubmit = async (data) => {
+    const result = await dispatch(addClasses(data));
+    if (!result.error) {
+      reset();
+      navigate("/classes");
+    }
     console.log("Form Data:", data);
     await new Promise((r) => setTimeout(r, 1000));
     reset();

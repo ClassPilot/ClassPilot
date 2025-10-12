@@ -10,6 +10,7 @@ export const studentSchema = z.object({
     .max(18, { message: "Age must be 18 or less" }),
   gender: z.string().optional(),
   notes: z.string().optional(),
+  grade: z.number().min(1, "Grade is required"),
   email: z
     .string()
     .email({ message: "Invalid student email" })
