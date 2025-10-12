@@ -1,9 +1,15 @@
 import { UserPlus } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useNavigate } from "react-router-dom";
 import { studentSchema } from "../Schema/StudentSchema";
+import { useDispatch } from "react-redux";
+import { addStudent } from "../Store/slices/StudentSlice";
 
 function AddStudentForm() {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  // const { loading, error } = useSelector((state) => state.);
   const {
     register,
     handleSubmit,
@@ -13,7 +19,8 @@ function AddStudentForm() {
     resolver: zodResolver(studentSchema),
     defaultValues: {
       full_name: "",
-      age: "",
+      age: undefined,
+      grade: undefined,
       gender: "",
       notes: "",
       email: "",
@@ -23,8 +30,26 @@ function AddStudentForm() {
   });
 
   const onSubmit = async (data) => {
-    // Here you can call your Redux dispatch to add student
-    // dispatch(addStudent(data));
+    // ✅ Map frontend fields to backend expected fields
+    const payload = {
+      name: data.full_name, // backend expects "name"
+      age: data.age,
+      gender: data.gender,
+      grade: Number(data.grade),
+      notes: data.notes,
+      email: data.email,
+      parent_email: data.parentEmail,
+      parent_phone: data.parentPhone,
+    };
+
+    const result = await dispatch(addStudent(payload));
+
+    if (addStudent.fulfilled.match(result)) {
+      reset();
+      navigate("/students");
+    } else {
+      console.error("Failed to add student:", result.error);
+    }
     console.log("Form Data:", data);
     await new Promise((r) => setTimeout(r, 1000));
     reset();
@@ -73,6 +98,22 @@ function AddStudentForm() {
             />
             {errors.age && (
               <p className="text-red-500 text-sm mt-1">{errors.age.message}</p>
+            )}
+          </div>
+          <div>
+            <label className="block text-gray-700 font-medium mb-1">
+              Grade <span className="text-red-500">*</span>
+            </label>
+            <input
+              type="number"
+              {...register("grade", { valueAsNumber: true })} // ✅ ensures number type
+              className="w-full border rounded-lg px-4 py-2 bg-gray-50 focus:ring-2 focus:ring-indigo-500"
+              placeholder="e.g. 6"
+            />
+            {errors.grade && (
+              <p className="text-red-500 text-sm mt-1">
+                {errors.grade.message}
+              </p>
             )}
           </div>
 
