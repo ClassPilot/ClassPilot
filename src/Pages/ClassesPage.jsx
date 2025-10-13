@@ -31,7 +31,7 @@ function ClassesPage() {
           className="bg-indigo-500 hover:bg-indigo-600 text-white px-4 py-2 rounded-lg shadow-sm transition-all flex items-center gap-2"
         >
           + Create Class
-        </button>
+        </Link>
       </div>
 
       {/* Search */}
