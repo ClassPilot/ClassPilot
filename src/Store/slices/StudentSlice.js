@@ -1,3 +1,19 @@
+// Fetch grades for a student
+export const fetchGradesForStudent = createAsyncThunk(
+  "students/fetchGradesForStudent",
+  async (studentId, { rejectWithValue }) => {
+    try {
+      const response = await axios.get(
+        `${BaseUrl}/api/students/${studentId}/grades`
+      );
+      return { studentId, grades: response.data };
+    } catch (err) {
+      return rejectWithValue(
+        err.response?.data?.message || "Failed to fetch grades"
+      );
+    }
+  }
+);
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { BaseUrl } from "../BaseUrl";
 import axios from "axios";
@@ -45,6 +61,7 @@ const initialState = {
   students: [],
   loading: false,
   error: null,
+  studentGrades: {}, // { [studentId]: [grades] }
 };
 
 const StudentsSlice = createSlice({
@@ -106,6 +123,20 @@ const StudentsSlice = createSlice({
         state.students = state.students.filter(
           (student) => student.id !== action.payload
         );
+      })
+
+      // Fetch grades for student
+      .addCase(fetchGradesForStudent.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchGradesForStudent.fulfilled, (state, action) => {
+        state.loading = false;
+        state.studentGrades[action.payload.studentId] = action.payload.grades;
+      })
+      .addCase(fetchGradesForStudent.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
       });
   },
 });

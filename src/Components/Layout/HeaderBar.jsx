@@ -17,30 +17,24 @@ export default function HeaderBar() {
   const navigate = useNavigate();
 
   // ✅ Get user directly from auth slice
-  const user = useSelector((state) => state.auth.user);
-
-  // students for notifications
-  const students = useSelector(
-    (state) => state.students?.items || state.students || []
-  );
-
+  // const user = useSelector((state) => state.auth.user);
+  const {
+    user,
+    loaded,
+    status,
+    students = [],
+  } = useSelector((state) => state.profile || {});
   const [query, setQuery] = useState("");
   const [open, setOpen] = useState(false);
   const [reminders, setReminders] = useState([]);
-  const [readIds, setReadIds] = useState(() => {
-    try {
-      return new Set(
-        JSON.parse(localStorage.getItem("readNotifications") || "[]")
-      );
-    } catch {
-      return new Set();
-    }
-  });
+  const [readIds, setReadIds] = useState(new Set());
 
+  // ✅ Show only the first name or fallback
   const displayName =
-    (user?.firstName || user?.lastName
-      ? [user.firstName, user.lastName].filter(Boolean).join(" ")
-      : user?.name) || "Teacher";
+    user?.firstName ||
+    user?.fullName?.split(" ")[0] ||
+    user?.name?.split(" ")[0] ||
+    "Teacher";
 
   const dropdownRef = useRef(null);
   useEffect(() => {
