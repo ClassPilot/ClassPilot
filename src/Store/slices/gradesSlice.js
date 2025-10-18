@@ -67,8 +67,11 @@ export const fetchGradesForClass = createAsyncThunk(
   "grades/fetchGradesForClass",
   async (classId, { rejectWithValue }) => {
     try {
+      // Always send token from localStorage if present
+      const token = localStorage.getItem("token");
       const response = await axios.get(
-        `${BaseUrl}/api/classes/${classId}/grades`
+        `${BaseUrl}/api/classes/${classId}/grades`,
+        token ? { headers: { Authorization: `Bearer ${token}` } } : undefined
       );
       return { classId, grades: response.data };
     } catch (err) {
