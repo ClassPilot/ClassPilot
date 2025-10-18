@@ -2,19 +2,37 @@ import { useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchStudents } from "../Store/slices/StudentSlice";
-import { User, Mail, BookOpen, Calendar } from "lucide-react";
+import { fetchGradesForClass } from "../Store/slices/gradesSlice";
+import { User, Mail, BookOpen, Calendar, Star } from "lucide-react";
 
 const StudentDetailsPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { students } = useSelector((state) => state.students);
+  const classes = useSelector((state) => state.classes.classes || []);
+  const classStudentsMap = useSelector(
+    (state) => state.classes.classStudents || {}
+  );
+  const classGrades = useSelector((state) => state.grades.classGrades || {});
+
+  const student = students.find((s) => s._id === id);
 
   useEffect(() => {
     if (!students.length) dispatch(fetchStudents());
   }, [dispatch, students.length]);
 
-  const student = students.find((s) => s._id === id);
+  // Fetch grades for all classes the student belongs to
+  useEffect(() => {
+    if (!student) return;
+    (classes || []).forEach((c) => {
+      const studentsForClass = classStudentsMap[c._id] || [];
+      const belongs = studentsForClass.some((s) => s._id === id);
+      if (belongs) {
+        dispatch(fetchGradesForClass(c._id));
+      }
+    });
+  }, [student, classes, classStudentsMap, dispatch, id]);
 
   if (!student)
     return (
@@ -44,6 +62,60 @@ const StudentDetailsPage = () => {
 
         {/* Student Info */}
         <div className="space-y-3 text-gray-700">
+          {/* Classes tags and grades */}
+          <div className="mb-4">
+            {(classes || []).map((c) => {
+              const studentsForClass = classStudentsMap[c._id] || [];
+              const belongs = studentsForClass.some(
+                (s) => s._id === student._id
+              );
+              if (!belongs) return null;
+              // Find grades for this student in this class
+              const grades = (classGrades[c._id] || []).filter(
+                (g) => g.studentId === student._id
+              );
+              console.log(
+                "Class:",
+                c.name,
+                "Student:",
+                student.name,
+                "Grades:",
+                grades
+              );
+              return (
+                <div key={c._id} className="mb-2">
+                  <span className="text-xs bg-indigo-100 text-indigo-700 px-2 py-1 rounded-full mr-2">
+                    {c.name}
+                  </span>
+                  {grades.length > 0 ? (
+                    <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded-full">
+                      Grades:
+                    </span>
+                  ) : (
+                    <span className="text-xs bg-gray-100 text-gray-500 px-2 py-1 rounded-full">
+                      No grades yet
+                    </span>
+                  )}
+                  {grades.length > 0 && (
+                    <ul className="ml-4 mt-1">
+                      {grades.map((g) => (
+                        <li
+                          key={g._id}
+                          className="text-xs flex items-center gap-2 mb-1"
+                        >
+                          <Star size={12} className="text-yellow-500" />
+                          <span className="font-medium">
+                            {g.assignment}:
+                          </span>{" "}
+                          <span>{g.score}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
+              );
+            })}
+          </div>
           <p>
             <strong>Age:</strong> {student.age}
           </p>

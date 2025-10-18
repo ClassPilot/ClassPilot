@@ -145,7 +145,10 @@ const ClassDetailsPage = () => {
   const classGrades = useSelector(
     (state) => state.grades.classGrades || EMPTY_OBJECT
   );
-  const loading = useSelector((state) => state.classes.loading);
+  // Only treat this class as loading when no students have been loaded for it
+  const classLoading = useSelector(
+    (state) => state.classes.loading && !state.classes.classStudents?.[id]
+  );
   const [selectedStudentIds, setSelectedStudentIds] = useState([]);
   const [enrollMessage, setEnrollMessage] = useState("");
   const [removeMessage, setRemoveMessage] = useState("");
@@ -246,7 +249,7 @@ const ClassDetailsPage = () => {
         {/* Enrolled Students as cards */}
         <div className="mb-8">
           <h3 className="text-lg font-semibold mb-4">Enrolled Students</h3>
-          {loading ? (
+          {classLoading ? (
             <div>Loading students...</div>
           ) : enrolledStudents.length === 0 ? (
             <div className="text-gray-500">

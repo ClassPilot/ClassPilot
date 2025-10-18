@@ -24,11 +24,14 @@ export const enrollStudentsInClass = createAsyncThunk(
   "classes/enrollStudentsInClass",
   async ({ classId, studentIds }, { rejectWithValue }) => {
     try {
+      // Always send token from localStorage if present
+      const token = localStorage.getItem("token");
       const response = await axios.post(
         `${BaseUrl}/api/classes/${classId}/students`,
         {
           student_ids: studentIds,
-        }
+        },
+        token ? { headers: { Authorization: `Bearer ${token}` } } : undefined
       );
       return {
         classId,

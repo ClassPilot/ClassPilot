@@ -17,6 +17,10 @@ const StudentsPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { students, loading, error } = useSelector((state) => state.students);
+  const classes = useSelector((state) => state.classes.classes || []);
+  const classStudentsMap = useSelector(
+    (state) => state.classes.classStudents || {}
+  );
 
   const [successMessage, setSuccessMessage] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
@@ -183,6 +187,25 @@ const StudentsPage = () => {
                 <span className="font-medium text-gray-800">Gender:</span>{" "}
                 {student.gender}
               </p>
+
+              {/* Class tags */}
+              <div className="flex flex-wrap gap-2 mb-3">
+                {(classes || []).map((c) => {
+                  const studentsForClass = classStudentsMap[c._id] || [];
+                  const belongs = studentsForClass.some(
+                    (s) => s._id === student._id
+                  );
+                  if (!belongs) return null;
+                  return (
+                    <span
+                      key={c._id}
+                      className="text-xs bg-indigo-100 text-indigo-700 px-2 py-1 rounded-full"
+                    >
+                      {c.name}
+                    </span>
+                  );
+                })}
+              </div>
 
               {/* Footer */}
               <div className="flex justify-between items-center">
