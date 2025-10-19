@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Users, BookOpen, Clock, TrendingUp, Bell, Trash2 } from "lucide-react";
 import { Link } from "react-router-dom";
-import { Calendar } from "@/components/ui/calendar";
+import { Calendar } from "@/Components/ui/calendar";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchStudents } from "../Store/slices/StudentSlice";
 import { fetchClasses } from "../Store/slices/classesSlice";
