@@ -1,4 +1,3 @@
-// ...existing code...
 import { Navigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 
@@ -29,4 +28,3 @@ const ProtectedRoute = ({ children, requireAuth }) => {
 };
 
 export default ProtectedRoute;
-// ...existing code...
